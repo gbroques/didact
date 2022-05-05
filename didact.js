@@ -332,10 +332,7 @@ function reconcileChildren(wipFiber, elements) {
     // and the oldFiber is what we rendered the last time.
 
     // We need to compare them to see if there’s any change we need to apply to the DOM.
-    while (
-        index < elements.length ||
-        oldFiber != null
-    ) {
+    while (index < elements.length || oldFiber) {
         const element = elements[index];
         let newFiber = null;
 
