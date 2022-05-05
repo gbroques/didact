@@ -20,6 +20,8 @@
  * @property {Fiber} child Child fiber.
  * @property {Fiber} sibling Sibling fiber.
  * @property {Fiber} parent Parent fiber.
+ *                          TODO: Should we name parent "return" instead like React does?
+ *                          https://www.velotio.com/engineering-blog/react-fiber-algorithm
  * @property {Fiber} alternate Link to the old fiber,
  *                             the fiber that was committed to the DOM
  *                             in the previous commit phase.
@@ -85,8 +87,11 @@ function createTextElement(value) {
 
 // GLOBALS
 let nextUnitOfWork = null;
+// TODO: Should we rename this to "current" and "workInProgress" to match React?
 let currentRoot = null;
 let wipRoot = null;
+// TODO: Should deletions be a property on the fiber node?
+//       https://github.com/facebook/react/blob/3dc9a8af05f98d185ca55d56f163dbb46e7ad3f4/packages/react-reconciler/src/ReactFiber.new.js#L150
 let deletions = null;
 
 function workLoop(deadline) {
@@ -329,6 +334,9 @@ function updateHostComponent(fiber) {
  * Reconcile children for placing, updating, or deleting nodes.
  * Compare the elements we receive on the render function
  * to the last fiber tree that was committed to the DOM.
+ * 
+ * Reconciliation is the algorithm for diffing two virtual DOM trees.
+ * https://reactjs.org/docs/reconciliation.html
  */
 function reconcileChildren(wipFiber, elements) {
     let index = 0;
