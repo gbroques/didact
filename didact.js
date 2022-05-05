@@ -243,10 +243,53 @@ function performUnitOfWork(fiber) {
     } else {
         updateHostComponent(fiber);
     }
-    // Search for the next unit of work.
-    // First try with the child,
-    // then with the sibling,
-    // then with the uncle, and so on.
+    /**
+     * Search for the next unit of work.
+     * First try with the child,
+     * then with the sibling,
+     * then with the uncle, and so on.
+     * 
+     * Consider the following example:
+     * 
+     *  <div>
+     *    <h1>
+     *      <p />
+     *      <a />
+     *    </h1>
+     *    <h2 />
+     *  </div>
+     * 
+     * From our example,
+     * when we finish working on the div fiber
+     * the next unit of work will be the h1 fiber.
+     * 
+     * If the fiber doesn’t have a child,
+     * we use the sibling as the next unit of work.
+     * 
+     * For example,
+     * the p fiber doesn’t have a child so we move to the a fiber after finishing it.
+     * 
+     * If the fiber doesn’t have a child or a sibling
+     * we go to the "uncle": the sibling of the parent.
+     * 
+     * In our example,
+     * when we finish working on the a fiber
+     * the next unit of work will be the h2 fiber.
+     * 
+     *  root
+     *  │ ▲
+     *  │ │
+     *  ▼ │
+     *  <div>
+     *  │ ▲
+     *  │ │ ◄──┐
+     *  ▼ │    │
+     *  <h1>──►<h2>
+     *  │ ▲
+     *  │ │ ◄───┐
+     *  ▼ │     │
+     *  <p>───►<a>
+     */
     if (fiber.child) {
         return fiber.child;
     }
@@ -275,9 +318,6 @@ function updateHostComponent(fiber) {
     if (!fiber.dom) {
         fiber.dom = createDom(fiber);
     }
-    // flatten children to support children as an array.
-    // <div>{posts.map(post => <p>{post}</p>)}</div>
-    // https://github.com/pomber/didact/issues/11
     reconcileChildren(fiber, fiber.props.children);
 }
 
