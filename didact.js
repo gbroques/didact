@@ -33,7 +33,8 @@
  * @param {string|function} type Type of element.
  *                               Tag name (e.g. "div", "span", etc.) or component function.
  * @param {Object} props Properties of element.
- * @param  {Array.<*>} children Children elements may be Didact elements or primitives.
+ * @param  {Array.<*>} children Children elements may be Didact elements,
+ *                              primitives, or an array of Didact elements.
  * @returns {DidactElement} A Didact element.
  */
 function createElement(type, props, ...children) {
@@ -41,11 +42,11 @@ function createElement(type, props, ...children) {
         type,
         props: {
             ...props,
-            children: children.map(child => 
+            children: children.flat().map(child => (
                 typeof child !== "object" ?
                 createTextElement(child) :
                 child
-            )
+            ))
         }
     };
 }
@@ -270,7 +271,7 @@ function updateHostComponent(fiber) {
     // flatten children to support children as an array.
     // <div>{posts.map(post => <p>{post}</p>)}</div>
     // https://github.com/pomber/didact/issues/11
-    reconcileChildren(fiber, fiber.props.children.flat());
+    reconcileChildren(fiber, fiber.props.children);
 }
 
 function reconcileChildren(wipFiber, elements) {
