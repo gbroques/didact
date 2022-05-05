@@ -337,6 +337,8 @@ function updateHostComponent(fiber) {
  * 
  * Reconciliation is the algorithm for diffing two virtual DOM trees.
  * https://reactjs.org/docs/reconciliation.html
+ * 
+ * https://github.com/facebook/react/blob/v18.1.0/packages/react-reconciler/src/ReactFiberBeginWork.new.js#L287-L318
  */
 function reconcileChildren(wipFiber, elements) {
     let index = 0;
