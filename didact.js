@@ -182,7 +182,7 @@ function updateDom(dom, prevProps, nextProps) {
     // remove properties
     Object.keys(prevProps)
         .filter(isProperty)
-        .filter(isGone(prevProps, nextProps))
+        .filter(isGone(nextProps))
         .forEach(name => {
             dom[name] = "";
         });
@@ -224,7 +224,7 @@ function isNew(prev, next) {
     return key => prev[key] !== next[key];
 }
 
-function isGone(prev, next) {
+function isGone(next) {
     return key => !(key in next);
 }
 
