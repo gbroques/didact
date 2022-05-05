@@ -106,22 +106,29 @@ function workLoop(deadline) {
 }
 
 /**
- * Render element in the DOM under the root node.
+ * Create root.
  * 
- * @param {DidactElement} element Element to render.
- * @param {Element} root Root DOM element to render under.
+ * @param {Element} rootDomElement Root DOM element to render under.
  */
- function render(element, root) {
-    wipRoot = {
-        dom: root,
-        props: {
-            children: [element]
-        },
-        alternate: currentRoot
+ function createRoot(rootDomElement) {
+    const root = {
+        /**
+         * @param {DidactElement} element Element to render.
+         */
+        render: (element) => {
+            wipRoot = {
+                dom: rootDomElement,
+                props: {
+                    children: [element]
+                },
+                alternate: currentRoot
+            };
+            deletions = [];
+            nextUnitOfWork = wipRoot;
+            requestIdleCallback(workLoop);
+        }
     };
-    deletions = [];
-    nextUnitOfWork = wipRoot;
-    requestIdleCallback(workLoop);
+    return root;
 }
 
 
@@ -375,7 +382,7 @@ function useState(initial) {
 
 const Didact = {
     createElement,
-    render,
+    createRoot,
     useState
 };
 

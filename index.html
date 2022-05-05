@@ -14,10 +14,9 @@
         import Didact from "./didact.js";
         import App from "./app.dist.js";
 
-        Didact.render(
-            Didact.createElement(App),
-            document.getElementById("root")
-        );
+        const container = document.getElementById('root');
+        const root = Didact.createRoot(container);
+        root.render(Didact.createElement(App));
     </script>
 </body>
 </html>
