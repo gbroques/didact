@@ -1,3 +1,5 @@
+// Tell Babel to use Didact.createElement for JSX.
+// https://babeljs.io/docs/en/babel-plugin-transform-react-jsx#customizing-the-classic-runtime-import
 /** @jsx Didact.createElement */
 
 import Didact from "./didact.js";
