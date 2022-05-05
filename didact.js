@@ -143,6 +143,9 @@ function commitWork(fiber) {
     if (!fiber) {
         return;
     }
+    // the fiber from a function component doesn’t have a DOM node
+    // to find the parent of a DOM node,
+    // we go up the fiber tree until we find a fiber with a DOM node.
     let domParentFiber = fiber.parent;
     while (!domParentFiber.dom) {
         domParentFiber = domParentFiber.parent;
@@ -322,13 +325,18 @@ function updateHostComponent(fiber) {
     reconcileChildren(fiber, fiber.props.children);
 }
 
+/**
+ * Reconcile children for placing, updating, or deleting nodes.
+ * Compare the elements we receive on the render function
+ * to the last fiber tree that was committed to the DOM.
+ */
 function reconcileChildren(wipFiber, elements) {
     let index = 0;
     let oldFiber = wipFiber.alternate && wipFiber.alternate.child;
     let prevSibling = null;
 
     // Iterate over an array and a linked list at the same time
-    // Inside while is oldFiber and element.
+    // Inside the while loop is the oldFiber and element.
     // The element is the thing we want to render to the DOM
     // and the oldFiber is what we rendered the last time.
 
@@ -352,7 +360,7 @@ function reconcileChildren(wipFiber, elements) {
                 parent: wipFiber,
                 alternate: oldFiber,
                 effectTag: "UPDATE"
-            }
+            };
         }
         if (element && !sameType) {
             // add this node
@@ -363,7 +371,7 @@ function reconcileChildren(wipFiber, elements) {
                 parent: wipFiber,
                 alternate: null,
                 effectTag: "PLACEMENT"
-            }
+            };
         }
         if (oldFiber && !sameType) {
             // delete oldFiber's node
@@ -404,6 +412,8 @@ function useState(initial) {
 
     const setState = action => {
         hook.queue.push(action);
+        // do something similiar to render function
+        // set wipRoop and nextUnitOfWork
         wipRoot = {
             dom: currentRoot.dom,
             props: currentRoot.props,
