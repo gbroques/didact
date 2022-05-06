@@ -25,6 +25,8 @@
  * @property {Fiber} alternate Link to the old fiber,
  *                             the fiber that was committed to the DOM
  *                             in the previous commit phase.
+ *                             The alternate of the current fiber is the work-in-progress,
+ *                             and the alternate of the work-in-progress is the current fiber.
  * @property {string} effectTag Describes type of change during reconciliation.
  */
 
