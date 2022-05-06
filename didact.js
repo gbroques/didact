@@ -87,9 +87,17 @@ function createTextElement(value) {
 
 // GLOBALS
 let nextUnitOfWork = null;
-// TODO: Should we rename this to "current" and "workInProgress" to match React?
-let currentRoot = null;
-let wipRoot = null;
+
+/**
+ * The current state previously committed to the browser.
+ * @type {Fiber}
+ */
+let current = null;
+/**
+ * Work in progress state to be committed to the browser.
+ * @type {Fiber}
+ */
+let workInProgress = null;
 // TODO: Should deletions be a property on the fiber node?
 //       https://github.com/facebook/react/blob/3dc9a8af05f98d185ca55d56f163dbb46e7ad3f4/packages/react-reconciler/src/ReactFiber.new.js#L150
 let deletions = null;
@@ -101,7 +109,7 @@ function workLoop(deadline) {
         shouldYield = deadline.timeRemaining() < 1;
     }
 
-    if (!nextUnitOfWork && wipRoot) {
+    if (!nextUnitOfWork && workInProgress) {
         commitRoot();
     }
 
@@ -121,15 +129,15 @@ function workLoop(deadline) {
          * @param {DidactElement} element Element to render.
          */
         render: (element) => {
-            wipRoot = {
+            workInProgress = {
                 dom: rootDomElement,
                 props: {
                     children: [element]
                 },
-                alternate: currentRoot
+                alternate: current
             };
             deletions = [];
-            nextUnitOfWork = wipRoot;
+            nextUnitOfWork = workInProgress;
             requestIdleCallback(workLoop);
         }
     };
@@ -139,9 +147,9 @@ function workLoop(deadline) {
 
 function commitRoot() {
     deletions.forEach(commitWork);
-    commitWork(wipRoot.child);
-    currentRoot = wipRoot
-    wipRoot = null;
+    commitWork(workInProgress.child);
+    current = workInProgress
+    workInProgress = null;
 }
 
 function commitWork(fiber) {
@@ -424,12 +432,12 @@ function useState(initial) {
         hook.queue.push(action);
         // do something similiar to render function
         // set wipRoop and nextUnitOfWork
-        wipRoot = {
-            dom: currentRoot.dom,
-            props: currentRoot.props,
-            alternate: currentRoot
+        workInProgress = {
+            dom: current.dom,
+            props: current.props,
+            alternate: current
         };
-        nextUnitOfWork = wipRoot;
+        nextUnitOfWork = workInProgress;
         deletions = [];
     };
 
