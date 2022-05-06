@@ -115,6 +115,10 @@ function workLoop(deadline) {
 
     // React uses the scheduler package instead of requestIdleCallback.
     // But for this use case it’s conceptually the same.
+    // requestIdleCallback is actually a bit too restrictive and is not executed often enough to implement smooth UI rendering,
+    // so React team implemented their own version.
+    // https://indepth.dev/posts/1007/the-how-and-why-on-reacts-usage-of-linked-list-in-fiber-to-walk-the-components-tree
+    // https://github.com/facebook/react/issues/13206?source=post_page---------------------------#issuecomment-418923831
     requestIdleCallback(workLoop);
 }
 
@@ -382,6 +386,11 @@ function reconcileChildren(wipFiber, elements) {
         }
         if (element && !sameType) {
             // add this node
+            // When a React element is converted into a fiber node for the first time,
+            // React uses the data from the element to create a fiber in the createFiberFromTypeAndProps function
+            // createFiberFromElement -> createFiberFromTypeAndProps
+            // https://github.com/facebook/react/blob/v18.1.0/packages/react-reconciler/src/ReactFiber.new.js#L639
+            // https://indepth.dev/posts/1008/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react
             newFiber = {
                 type: element.type,
                 props: element.props,
