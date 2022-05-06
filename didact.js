@@ -19,9 +19,9 @@
  * @property {Element} dom DOM element.
  * @property {Fiber} child Child fiber.
  * @property {Fiber} sibling Sibling fiber.
- * @property {Fiber} parent Parent fiber.
- *                          TODO: Should we name parent "return" instead like React does?
- *                          https://www.velotio.com/engineering-blog/react-fiber-algorithm
+ * @property {Fiber} return The fiber to which the program should return after processing the current fiber.
+ *                          Also can be thought of as the parent fiber.
+ *                          @see https://github.com/acdlite/react-fiber-architecture#return
  * @property {Fiber} alternate Link to the old fiber,
  *                             the fiber that was committed to the DOM
  *                             in the previous commit phase.
@@ -151,9 +151,9 @@ function commitWork(fiber) {
     // the fiber from a function component doesn’t have a DOM node
     // to find the parent of a DOM node,
     // we go up the fiber tree until we find a fiber with a DOM node.
-    let domParentFiber = fiber.parent;
+    let domParentFiber = fiber.return;
     while (!domParentFiber.dom) {
-        domParentFiber = domParentFiber.parent;
+        domParentFiber = domParentFiber.return;
     }
     const domParent = domParentFiber.dom;
 
@@ -307,7 +307,7 @@ function performUnitOfWork(fiber) {
         if (nextFiber.sibling) {
             return nextFiber.sibling;
         }
-        nextFiber = nextFiber.parent;
+        nextFiber = nextFiber.return;
     }
 }
 
@@ -367,7 +367,7 @@ function reconcileChildren(wipFiber, elements) {
                 type: oldFiber.type,
                 props: element.props,
                 dom: oldFiber.dom,
-                parent: wipFiber,
+                return: wipFiber,
                 alternate: oldFiber,
                 effectTag: "UPDATE"
             };
@@ -378,7 +378,7 @@ function reconcileChildren(wipFiber, elements) {
                 type: element.type,
                 props: element.props,
                 dom: null,
-                parent: wipFiber,
+                return: wipFiber,
                 alternate: null,
                 effectTag: "PLACEMENT"
             };
