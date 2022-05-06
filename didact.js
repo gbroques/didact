@@ -1,4 +1,6 @@
 /**
+ * Analogous to a ReactElement.
+ * 
  * @typedef DidactElement
  * @type {Object}
  * @property {string} type Type of DOM element to be created.
@@ -7,9 +9,12 @@
  */
 
 /**
- * Data structure to make it easy to find the next unit of work.
+ * Internal data structure to make it easy to find the next unit of work,
+ * during the reconciliation or rendering phase.
  * 
  * Inherits from a DidactElement.
+ * 
+ * @see https://github.com/facebook/react/blob/v18.1.0/packages/react-reconciler/src/ReactInternalTypes.js#L64-L193
  * 
  * @typedef Fiber
  * @type {Object}
