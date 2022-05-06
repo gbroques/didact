@@ -23,6 +23,10 @@ Inspired and adapted from [Build your own React](https://pomb.us/build-your-own-
 
 Additionally, on UNIX-like operating systems (Linux, Mac, Git Bash on Windows), you can run `npm start`; which runs `npm run serve` and `npm run watch` in parallel.
 
+## Limitations
+
+* SVG is not supported.
+
 ## Resources
 
 * [React Source Code Walkthrough - YouTube](https://www.youtube.com/playlist?list=PLvx8w9g4qv_p-OS-XdbB3Ux_6DMXhAJC3)
