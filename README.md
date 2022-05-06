@@ -26,6 +26,8 @@ Additionally, on UNIX-like operating systems (Linux, Mac, Git Bash on Windows), 
 ## Limitations
 
 * SVG is not supported.
+* Not performant for production code.
+* No Fragment syntax.
 
 ## Resources
 
