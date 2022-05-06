@@ -4,6 +4,7 @@
   "description": "Inspired from [Build your own React](https://pomb.us/build-your-own-react/).",
   "main": "didact.js",
   "scripts": {
+    "start": "npm run serve & npm run watch",
     "serve": "./node_modules/.bin/http-server",
     "watch": "./node_modules/.bin/babel --watch app.source.js --out-file app.dist.js",
     "test": "echo \"Error: no test specified\" && exit 1"

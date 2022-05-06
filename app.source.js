@@ -9,11 +9,14 @@ export default function App() {
     const handleClick = (event) => {
         setCount(c => c + 1);
     };
-    const animals = ["dog", "cat", "fish"];
     return (
         <div>
-            <h1>Didact</h1>
-            <h1>{count}</h1>
+            <header style="display: flex">
+                <h1>Didact</h1>
+                <img src="react-icon.svg" alt="Didact" style="max-width: 35px; margin-left: 8px" />
+            </header>
+            
+            <h2>{count}</h2>
             <button onClick={handleClick}>
                 Increment
             </button>
@@ -24,11 +27,6 @@ export default function App() {
                 </a>
                 .
             </p>
-            <ul>
-            {
-                animals.map(animal => <li>{animal}</li>)
-            }
-            </ul>
         </div>
     );
 }
